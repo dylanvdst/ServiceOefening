@@ -16,4 +16,14 @@ public interface RetrofitPosts
 {
     @GET("gameofthrones.json")
     Call<JsonObject> getGameOfThronesPosts();
+    @GET("belgium.json")
+    Call<JsonObject> getBelgiumPosts();
+    @GET("the_donald.json")
+    Call<JsonObject> getDonaldPosts();
+    @GET("funny.json")
+    Call<JsonObject> getFunnyPosts();
+    @GET("pictures.json")
+    Call<JsonObject> getPicturesPosts();
+    @GET("diy.json")
+    Call<JsonObject> getDIYPosts();
 }

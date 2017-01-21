@@ -12,19 +12,25 @@ import java.util.ArrayList;
 
 public class PostRepository
 {
-    private ArrayList<Post> gotPosts;
+    private ArrayList<Post> posts;
+
     public PostRepository(Context context)
     {
-        gotPosts = new ArrayList<>();
-    }
-
-    public void addPost(Post post)
-    {
-        gotPosts.add(post);
+        posts = new ArrayList<>();
     }
 
     public ArrayList<Post> getGoTPosts()
     {
-        return gotPosts;
+        return posts;
+    }
+
+    public void addPost(Post post)
+    {
+        posts.add(post);
+    }
+
+    public void clear()
+    {
+        posts.clear();
     }
 }

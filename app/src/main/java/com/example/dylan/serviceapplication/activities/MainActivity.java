@@ -3,6 +3,9 @@ package com.example.dylan.serviceapplication.activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.dylan.serviceapplication.R;
+import com.example.dylan.serviceapplication.fragments.MainActivityFragment;
+import com.example.dylan.serviceapplication.fragments.MainActivityFragment_ViewBinding;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -82,25 +87,37 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        MainActivityFragment fragment = new MainActivityFragment();
+        Bundle bundle = new Bundle();
+
+
         if (id == R.id.nav_funny)
         {
-            // Handle the camera action
+            bundle.putString("nav", "fun");
         } else if (id == R.id.nav_got)
         {
-
+            bundle.putString("nav", "got");
         } else if (id == R.id.nav_pictures)
         {
-
+            bundle.putString("nav", "pic");
         } else if (id == R.id.nav_belgium)
         {
-
+            bundle.putString("nav", "bel");
         } else if (id == R.id.nav_diy)
         {
-
+            bundle.putString("nav", "diy");
         } else if (id == R.id.nav_donald)
         {
-
+            bundle.putString("nav", "don");
         }
+
+        fragment.setArguments(bundle);
+
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -54,6 +54,207 @@ public class RedditAPI
                 JsonObject object = response.body();
                 JsonObject object1 = object.getAsJsonObject("data");
                 JsonArray object2 = object1.getAsJsonArray("children");
+                repository.clear();
+                for(int i = 0; i < object2.size(); i++)
+                {
+                    JsonObject object3 = object2.get(i).getAsJsonObject();
+                    JsonObject object4 = object3.getAsJsonObject("data");
+                    Post post = new Post();
+                    post.setTitle(object4.get("title").toString());
+                    post.setAuthor(object4.get("author").toString());
+                    repository.addPost(post);
+                }
+                ringProgressDialog.dismiss();
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t)
+            {
+                t.printStackTrace();
+            }
+        });
+
+    }
+
+    public void searchBelgiumReddit()
+    {
+        final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
+        final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
+        ringProgressDialog.setCancelable(true);
+        Call<JsonObject> callGoTPosts = service.getBelgiumPosts();
+        callGoTPosts.enqueue(new Callback<JsonObject>()
+        {
+
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
+            {
+
+                JsonObject object = response.body();
+                JsonObject object1 = object.getAsJsonObject("data");
+                JsonArray object2 = object1.getAsJsonArray("children");
+                repository.clear();
+                for(int i = 0; i < object2.size(); i++)
+                {
+                    JsonObject object3 = object2.get(i).getAsJsonObject();
+                    JsonObject object4 = object3.getAsJsonObject("data");
+                    Post post = new Post();
+                    post.setTitle(object4.get("title").toString());
+                    post.setAuthor(object4.get("author").toString());
+                    repository.addPost(post);
+                }
+                ringProgressDialog.dismiss();
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t)
+            {
+                t.printStackTrace();
+            }
+        });
+
+    }
+
+    public void searchFunnyReddit()
+    {
+        final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
+        final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
+        ringProgressDialog.setCancelable(true);
+        Call<JsonObject> callGoTPosts = service.getFunnyPosts();
+        repository.clear();
+        callGoTPosts.enqueue(new Callback<JsonObject>()
+        {
+
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
+            {
+
+                JsonObject object = response.body();
+                JsonObject object1 = object.getAsJsonObject("data");
+                JsonArray object2 = object1.getAsJsonArray("children");
+                for(int i = 0; i < object2.size(); i++)
+                {
+                    JsonObject object3 = object2.get(i).getAsJsonObject();
+                    JsonObject object4 = object3.getAsJsonObject("data");
+                    Post post = new Post();
+                    post.setTitle(object4.get("title").toString());
+                    post.setAuthor(object4.get("author").toString());
+                    repository.addPost(post);
+                }
+                ringProgressDialog.dismiss();
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t)
+            {
+                t.printStackTrace();
+            }
+        });
+
+    }
+
+    public void searchPicturesReddit()
+    {
+        final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
+        final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
+        ringProgressDialog.setCancelable(true);
+        Call<JsonObject> callGoTPosts = service.getPicturesPosts();
+        repository.clear();
+        callGoTPosts.enqueue(new Callback<JsonObject>()
+        {
+
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
+            {
+
+                JsonObject object = response.body();
+                JsonObject object1 = object.getAsJsonObject("data");
+                JsonArray object2 = object1.getAsJsonArray("children");
+                for(int i = 0; i < object2.size(); i++)
+                {
+                    JsonObject object3 = object2.get(i).getAsJsonObject();
+                    JsonObject object4 = object3.getAsJsonObject("data");
+                    Post post = new Post();
+                    post.setTitle(object4.get("title").toString());
+                    post.setAuthor(object4.get("author").toString());
+                    repository.addPost(post);
+                }
+                ringProgressDialog.dismiss();
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t)
+            {
+                t.printStackTrace();
+            }
+        });
+
+    }
+
+    public void searchDIYReddit()
+    {
+        final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
+        final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
+        ringProgressDialog.setCancelable(true);
+        Call<JsonObject> callGoTPosts = service.getDIYPosts();
+        repository.clear();
+        callGoTPosts.enqueue(new Callback<JsonObject>()
+        {
+
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
+            {
+
+                JsonObject object = response.body();
+                JsonObject object1 = object.getAsJsonObject("data");
+                JsonArray object2 = object1.getAsJsonArray("children");
+                for(int i = 0; i < object2.size(); i++)
+                {
+                    JsonObject object3 = object2.get(i).getAsJsonObject();
+                    JsonObject object4 = object3.getAsJsonObject("data");
+                    Post post = new Post();
+                    post.setTitle(object4.get("title").toString());
+                    post.setAuthor(object4.get("author").toString());
+                    repository.addPost(post);
+                }
+                ringProgressDialog.dismiss();
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t)
+            {
+                t.printStackTrace();
+            }
+        });
+
+    }
+
+    public void searchDonaldReddit()
+    {
+        final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
+        final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
+        ringProgressDialog.setCancelable(true);
+        Call<JsonObject> callGoTPosts = service.getDonaldPosts();
+        repository.clear();
+        callGoTPosts.enqueue(new Callback<JsonObject>()
+        {
+
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
+            {
+
+                JsonObject object = response.body();
+                JsonObject object1 = object.getAsJsonObject("data");
+                JsonArray object2 = object1.getAsJsonArray("children");
                 for(int i = 0; i < object2.size(); i++)
                 {
                     JsonObject object3 = object2.get(i).getAsJsonObject();

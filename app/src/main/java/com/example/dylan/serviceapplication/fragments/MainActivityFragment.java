@@ -29,6 +29,7 @@ public class MainActivityFragment extends Fragment
 
     protected RecyclerView.LayoutManager layoutManager;
 
+
     PostRepository repo;
     public MainActivityFragment()
     {
@@ -49,12 +50,29 @@ public class MainActivityFragment extends Fragment
     {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main_activity, container, false);
+        Bundle bundle = getArguments();
+
         ButterKnife.bind(this, rootView);
         repo = new PostRepository(getContext());
         PostAdapter adapter = new PostAdapter(repo.getGoTPosts(), getContext());
         recyclerView.setAdapter(adapter);
         RedditAPI api = new RedditAPI(getContext(), repo, adapter);
-        api.searchGameOfThronesReddit();
+        if(bundle != null)
+        {
+            switch (bundle.getString("nav"))
+            {
+                case "diy":api.searchDIYReddit();break;
+                case "fun": api.searchFunnyReddit();break;
+                case "got": api.searchGameOfThronesReddit();break;
+                case "pic": api.searchPicturesReddit();break;
+                case "bel": api.searchBelgiumReddit();break;
+                case "don": api.searchDonaldReddit();break;
+            }
+        }
+        else
+        {
+            api.searchBelgiumReddit();
+        }
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
@@ -66,4 +84,5 @@ public class MainActivityFragment extends Fragment
     {
         super.onPause();
     }
+
 }
