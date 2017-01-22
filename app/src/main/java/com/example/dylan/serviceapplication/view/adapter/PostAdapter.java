@@ -1,6 +1,7 @@
 package com.example.dylan.serviceapplication.view.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,14 +44,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MainViewHolder
     @Override
     public void onBindViewHolder(PostAdapter.MainViewHolder holder, int position)
     {
-        ImageView image = holder.thumbnail;
+        Post post =  postList.get(position);
+        ImageView thumbnail = holder.thumbnail;
         TextView title = holder.title;
         TextView author = holder.author;
         Context context = holder.thumbnail.getContext();
-        Picasso.with(context).load(R.drawable.ic_menu_camera).into(image);
-        image.setImageResource(R.drawable.ic_menu_camera);
-        title.setText(postList.get(position).getTitle());
-        author.setText(postList.get(position).getAuthor());
+        Picasso.with(context).load(post.getThumbnail()).into(thumbnail);
+        //image.setImageResource(R.drawable.ic_menu_camera);
+        title.setText(post.getTitle());
+        author.setText(post.getAuthor());
     }
 
     @Override

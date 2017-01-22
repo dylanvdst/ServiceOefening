@@ -60,8 +60,9 @@ public class RedditAPI
                     JsonObject object3 = object2.get(i).getAsJsonObject();
                     JsonObject object4 = object3.getAsJsonObject("data");
                     Post post = new Post();
-                    post.setTitle(object4.get("title").toString());
-                    post.setAuthor(object4.get("author").toString());
+                    post.setTitle(object4.get("title").getAsString());
+                    post.setAuthor(object4.get("author").getAsString());
+                    post.setThumbnail(object4.get("thumbnail").getAsString());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();
@@ -100,8 +101,9 @@ public class RedditAPI
                     JsonObject object3 = object2.get(i).getAsJsonObject();
                     JsonObject object4 = object3.getAsJsonObject("data");
                     Post post = new Post();
-                    post.setTitle(object4.get("title").toString());
-                    post.setAuthor(object4.get("author").toString());
+                    post.setTitle(object4.get("title").getAsString());
+                    post.setAuthor(object4.get("author").getAsString());
+                    post.setThumbnail(object4.get("thumbnail").getAsString());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();
@@ -140,8 +142,9 @@ public class RedditAPI
                     JsonObject object3 = object2.get(i).getAsJsonObject();
                     JsonObject object4 = object3.getAsJsonObject("data");
                     Post post = new Post();
-                    post.setTitle(object4.get("title").toString());
-                    post.setAuthor(object4.get("author").toString());
+                    post.setTitle(object4.get("title").getAsString());
+                    post.setAuthor(object4.get("author").getAsString());
+                    post.setThumbnail(object4.get("thumbnail").getAsString());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();
@@ -180,8 +183,9 @@ public class RedditAPI
                     JsonObject object3 = object2.get(i).getAsJsonObject();
                     JsonObject object4 = object3.getAsJsonObject("data");
                     Post post = new Post();
-                    post.setTitle(object4.get("title").toString());
-                    post.setAuthor(object4.get("author").toString());
+                    post.setTitle(object4.get("title").getAsString());
+                    post.setAuthor(object4.get("author").getAsString());
+                    post.setThumbnail(object4.get("thumbnail").getAsString());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();
@@ -220,8 +224,9 @@ public class RedditAPI
                     JsonObject object3 = object2.get(i).getAsJsonObject();
                     JsonObject object4 = object3.getAsJsonObject("data");
                     Post post = new Post();
-                    post.setTitle(object4.get("title").toString());
-                    post.setAuthor(object4.get("author").toString());
+                    post.setTitle(object4.get("title").getAsString());
+                    post.setAuthor(object4.get("author").getAsString());
+                    post.setThumbnail(object4.get("thumbnail").getAsString());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();
@@ -260,8 +265,9 @@ public class RedditAPI
                     JsonObject object3 = object2.get(i).getAsJsonObject();
                     JsonObject object4 = object3.getAsJsonObject("data");
                     Post post = new Post();
-                    post.setTitle(object4.get("title").toString());
-                    post.setAuthor(object4.get("author").toString());
+                    post.setTitle(object4.get("title").getAsString());
+                    post.setAuthor(object4.get("author").getAsString());
+                    post.setThumbnail(object4.get("thumbnail").getAsString());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();

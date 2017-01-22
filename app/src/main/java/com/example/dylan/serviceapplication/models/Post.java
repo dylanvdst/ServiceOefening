@@ -1,5 +1,7 @@
 package com.example.dylan.serviceapplication.models;
 
+import android.net.Uri;
+
 /**
  * Created by Dylan on 21/01/2017.
  */
