@@ -20,11 +20,14 @@ import com.example.dylan.serviceapplication.R;
 import com.example.dylan.serviceapplication.fragments.MainActivityFragment;
 import com.example.dylan.serviceapplication.fragments.MainActivityFragment_ViewBinding;
 import com.example.dylan.serviceapplication.fragments.PostFragment;
+import com.example.dylan.serviceapplication.manager.PostRepository;
 import com.example.dylan.serviceapplication.models.Post;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainActivityFragment.PostClicked
 {
+    public PostRepository repository;
+    private MainActivityFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,6 +49,7 @@ public class MainActivity extends AppCompatActivity
         if(findViewById(R.id.fragment) != null)
         {
             MainActivityFragment fragment = new MainActivityFragment();
+            this.mainFragment = fragment;
             getSupportFragmentManager().beginTransaction().add(R.id.fragment, fragment).commit();
         }
     }
@@ -80,9 +84,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
+        if (id == R.id.action_restart)
         {
-            return true;
+            mainFragment.api.searchPosts(mainFragment.subreddit.getName());
         }
 
         return super.onOptionsItemSelected(item);
@@ -101,22 +105,22 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_funny)
         {
-            bundle.putString("nav", "fun");
+            bundle.putString("nav", getString(R.string.s_funny));
         } else if (id == R.id.nav_got)
         {
-            bundle.putString("nav", "got");
+            bundle.putString("nav", getString(R.string.s_got));
         } else if (id == R.id.nav_pictures)
         {
-            bundle.putString("nav", "pic");
+            bundle.putString("nav", getString(R.string.s_pictures));
         } else if (id == R.id.nav_belgium)
         {
-            bundle.putString("nav", "bel");
+            bundle.putString("nav", getString(R.string.s_belgium));
         } else if (id == R.id.nav_diy)
         {
-            bundle.putString("nav", "diy");
+            bundle.putString("nav", getString(R.string.s_diy));
         } else if (id == R.id.nav_donald)
         {
-            bundle.putString("nav", "don");
+            bundle.putString("nav", getString(R.string.s_donald));
         }
 
         fragment.setArguments(bundle);
@@ -124,6 +128,7 @@ public class MainActivity extends AppCompatActivity
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, fragment);
+        this.mainFragment = fragment;
         transaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

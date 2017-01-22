@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,11 @@ import android.view.ViewGroup;
 import com.example.dylan.serviceapplication.R;
 import com.example.dylan.serviceapplication.manager.PostRepository;
 import com.example.dylan.serviceapplication.models.Post;
+import com.example.dylan.serviceapplication.models.Subreddit;
 import com.example.dylan.serviceapplication.network.RedditAPI;
 import com.example.dylan.serviceapplication.view.adapter.PostAdapter;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,9 +34,13 @@ public class MainActivityFragment extends Fragment
 
     public static PostOnclickListener postOnclickListener;
     public PostClicked postClickedInterface;
+    public RedditAPI api;
+    public Subreddit subreddit;
+    private ArrayList<Subreddit> subreddits;
 
 
-    PostRepository repo;
+    public PostRepository repo;
+
     public MainActivityFragment()
     {
         // Required empty public constructor
@@ -53,31 +61,37 @@ public class MainActivityFragment extends Fragment
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_main_activity, container, false);
         Bundle bundle = getArguments();
+        repo = new PostRepository(getContext());
+        subreddits = repo.getSubReddits();
+
+        if (bundle != null)
+        {
+
+            for (Subreddit s : subreddits)
+            {
+                if (s.getName().equals(bundle.getString("nav")))
+                {
+                    subreddit = s;
+                }
+            }
+        } else
+        {
+            subreddit = subreddits.get(0);
+        }
 
         ButterKnife.bind(this, rootView);
-        repo = new PostRepository(getContext());
-        PostAdapter adapter = new PostAdapter(repo.getGoTPosts(), getContext());
+
+        PostAdapter adapter = new PostAdapter(repo.getPosts(subreddit.getName()), getContext());
         recyclerView.setAdapter(adapter);
-        RedditAPI api = new RedditAPI(getContext(), repo, adapter);
-        if(bundle != null)
+        api = new RedditAPI(getContext(), repo, adapter);
+        if (repo.getPosts(subreddit.getName()).isEmpty())
         {
-            switch (bundle.getString("nav"))
-            {
-                case "diy":api.searchDIYReddit();break;
-                case "fun": api.searchFunnyReddit();break;
-                case "got": api.searchGameOfThronesReddit();break;
-                case "pic": api.searchPicturesReddit();break;
-                case "bel": api.searchBelgiumReddit();break;
-                case "don": api.searchDonaldReddit();break;
-            }
+            api.searchPosts(subreddit.getName());
         }
-        else
-        {
-            api.searchBelgiumReddit();
-        }
+
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-
+        Log.i("MAINACTIVITYFRAGMENT", subreddit.getName());
         return rootView;
     }
 
@@ -85,17 +99,18 @@ public class MainActivityFragment extends Fragment
     public void onAttach(Context context)
     {
         super.onAttach(context);
-        try {
+        try
+        {
             postClickedInterface = (PostClicked) getActivity();
-        }
-        catch(ClassCastException e)
+        } catch (ClassCastException e)
         {
             e.printStackTrace();
         }
     }
 
 
-    private class PostOnclickListener implements View.OnClickListener{
+    private class PostOnclickListener implements View.OnClickListener
+    {
 
         private final Context context;
 
@@ -108,7 +123,7 @@ public class MainActivityFragment extends Fragment
         public void onClick(View v)
         {
             currentIndex = recyclerView.getChildAdapterPosition(v);
-            postClickedInterface.postClicked(repo.getGoTPosts().get(currentIndex));
+            postClickedInterface.postClicked(repo.getPosts(subreddit.getName()).get(currentIndex));
         }
     }
 

@@ -6,10 +6,12 @@ import android.util.Log;
 
 import com.example.dylan.serviceapplication.manager.PostRepository;
 import com.example.dylan.serviceapplication.models.Post;
+import com.example.dylan.serviceapplication.models.Subreddit;
 import com.example.dylan.serviceapplication.view.adapter.PostAdapter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -29,6 +31,7 @@ public class RedditAPI
     PostRepository repository;
     Context context;
     PostAdapter adapter;
+    private Subreddit subreddit;
 
     public RedditAPI(Context context, PostRepository repository, PostAdapter adapter)
     {
@@ -38,12 +41,18 @@ public class RedditAPI
         this.adapter = adapter;
     }
 
-    public void searchGameOfThronesReddit()
+    public void searchPosts(String subreddit)
     {
         final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
         final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
         ringProgressDialog.setCancelable(true);
-        Call<JsonObject> callGoTPosts = service.getGameOfThronesPosts();
+        Call<JsonObject> callGoTPosts = service.getPosts(subreddit);
+        ArrayList<Subreddit> subreddits = repository.getSubredditFromDB();
+        for(Subreddit sub : subreddits)
+        {
+            if(sub.getName().equals(subreddit))
+                this.subreddit = sub;
+        }
         callGoTPosts.enqueue(new Callback<JsonObject>()
         {
 
@@ -51,22 +60,8 @@ public class RedditAPI
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
             {
 
-                JsonObject object = response.body();
-                JsonObject object1 = object.getAsJsonObject("data");
-                JsonArray object2 = object1.getAsJsonArray("children");
-                repository.clear();
-                for(int i = 0; i < object2.size(); i++)
-                {
-                    JsonObject object3 = object2.get(i).getAsJsonObject();
-                    JsonObject object4 = object3.getAsJsonObject("data");
-                    Post post = new Post();
-                    post.setTitle(object4.get("title").getAsString());
-                    post.setAuthor(object4.get("author").getAsString());
-                    post.setThumbnail(object4.get("thumbnail").getAsString());
-                    post.setUpvote(object4.get("ups").getAsInt());
-                    post.setDownvote(object4.get("downs").getAsInt());
-                    repository.addPost(post);
-                }
+
+                processCall(response);
                 ringProgressDialog.dismiss();
                 adapter.notifyDataSetChanged();
 
@@ -81,218 +76,25 @@ public class RedditAPI
 
     }
 
-    public void searchBelgiumReddit()
+    private void processCall(Response<JsonObject> response)
     {
-        final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
-        final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
-        ringProgressDialog.setCancelable(true);
-        Call<JsonObject> callGoTPosts = service.getBelgiumPosts();
-        callGoTPosts.enqueue(new Callback<JsonObject>()
-        {
-
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
-            {
-
-                JsonObject object = response.body();
-                JsonObject object1 = object.getAsJsonObject("data");
-                JsonArray object2 = object1.getAsJsonArray("children");
-                repository.clear();
-                for(int i = 0; i < object2.size(); i++)
-                {
-                    JsonObject object3 = object2.get(i).getAsJsonObject();
-                    JsonObject object4 = object3.getAsJsonObject("data");
-                    Post post = new Post();
-                    post.setTitle(object4.get("title").getAsString());
-                    post.setAuthor(object4.get("author").getAsString());
-                    post.setThumbnail(object4.get("thumbnail").getAsString());
-                    post.setUpvote(object4.get("ups").getAsInt());
-                    post.setDownvote(object4.get("downs").getAsInt());
-                    repository.addPost(post);
-                }
-                ringProgressDialog.dismiss();
-                adapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t)
-            {
-                t.printStackTrace();
-            }
-        });
-
-    }
-
-    public void searchFunnyReddit()
-    {
-        final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
-        final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
-        ringProgressDialog.setCancelable(true);
-        Call<JsonObject> callGoTPosts = service.getFunnyPosts();
+        JsonObject object = response.body();
+        JsonObject object1 = object.getAsJsonObject("data");
+        JsonArray object2 = object1.getAsJsonArray("children");
         repository.clear();
-        callGoTPosts.enqueue(new Callback<JsonObject>()
+        for(int i = 0; i < object2.size(); i++)
         {
-
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
-            {
-
-                JsonObject object = response.body();
-                JsonObject object1 = object.getAsJsonObject("data");
-                JsonArray object2 = object1.getAsJsonArray("children");
-                for(int i = 0; i < object2.size(); i++)
-                {
-                    JsonObject object3 = object2.get(i).getAsJsonObject();
-                    JsonObject object4 = object3.getAsJsonObject("data");
-                    Post post = new Post();
-                    post.setTitle(object4.get("title").getAsString());
-                    post.setAuthor(object4.get("author").getAsString());
-                    post.setThumbnail(object4.get("thumbnail").getAsString());
-                    post.setUpvote(object4.get("ups").getAsInt());
-                    post.setDownvote(object4.get("downs").getAsInt());
-                    repository.addPost(post);
-                }
-                ringProgressDialog.dismiss();
-                adapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t)
-            {
-                t.printStackTrace();
-            }
-        });
-
-    }
-
-    public void searchPicturesReddit()
-    {
-        final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
-        final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
-        ringProgressDialog.setCancelable(true);
-        Call<JsonObject> callGoTPosts = service.getPicturesPosts();
-        repository.clear();
-        callGoTPosts.enqueue(new Callback<JsonObject>()
-        {
-
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
-            {
-
-                JsonObject object = response.body();
-                JsonObject object1 = object.getAsJsonObject("data");
-                JsonArray object2 = object1.getAsJsonArray("children");
-                for(int i = 0; i < object2.size(); i++)
-                {
-                    JsonObject object3 = object2.get(i).getAsJsonObject();
-                    JsonObject object4 = object3.getAsJsonObject("data");
-                    Post post = new Post();
-                    post.setTitle(object4.get("title").getAsString());
-                    post.setAuthor(object4.get("author").getAsString());
-                    post.setThumbnail(object4.get("thumbnail").getAsString());
-                    post.setUpvote(object4.get("ups").getAsInt());
-                    post.setDownvote(object4.get("downs").getAsInt());
-                    repository.addPost(post);
-                }
-                ringProgressDialog.dismiss();
-                adapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t)
-            {
-                t.printStackTrace();
-            }
-        });
-
-    }
-
-    public void searchDIYReddit()
-    {
-        final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
-        final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
-        ringProgressDialog.setCancelable(true);
-        Call<JsonObject> callGoTPosts = service.getDIYPosts();
-        repository.clear();
-        callGoTPosts.enqueue(new Callback<JsonObject>()
-        {
-
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
-            {
-
-                JsonObject object = response.body();
-                JsonObject object1 = object.getAsJsonObject("data");
-                JsonArray object2 = object1.getAsJsonArray("children");
-                for(int i = 0; i < object2.size(); i++)
-                {
-                    JsonObject object3 = object2.get(i).getAsJsonObject();
-                    JsonObject object4 = object3.getAsJsonObject("data");
-                    Post post = new Post();
-                    post.setTitle(object4.get("title").getAsString());
-                    post.setAuthor(object4.get("author").getAsString());
-                    post.setThumbnail(object4.get("thumbnail").getAsString());
-                    post.setUpvote(object4.get("ups").getAsInt());
-                    post.setDownvote(object4.get("downs").getAsInt());
-                    repository.addPost(post);
-                }
-                ringProgressDialog.dismiss();
-                adapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t)
-            {
-                t.printStackTrace();
-            }
-        });
-
-    }
-
-    public void searchDonaldReddit()
-    {
-        final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
-        final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
-        ringProgressDialog.setCancelable(true);
-        Call<JsonObject> callGoTPosts = service.getDonaldPosts();
-        repository.clear();
-        callGoTPosts.enqueue(new Callback<JsonObject>()
-        {
-
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
-            {
-
-                JsonObject object = response.body();
-                JsonObject object1 = object.getAsJsonObject("data");
-                JsonArray object2 = object1.getAsJsonArray("children");
-                for(int i = 0; i < object2.size(); i++)
-                {
-                    JsonObject object3 = object2.get(i).getAsJsonObject();
-                    JsonObject object4 = object3.getAsJsonObject("data");
-                    Post post = new Post();
-                    post.setTitle(object4.get("title").getAsString());
-                    post.setAuthor(object4.get("author").getAsString());
-                    post.setThumbnail(object4.get("thumbnail").getAsString());
-                    post.setUpvote(object4.get("ups").getAsInt());
-                    post.setDownvote(object4.get("downs").getAsInt());
-                    repository.addPost(post);
-                }
-                ringProgressDialog.dismiss();
-                adapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t)
-            {
-                t.printStackTrace();
-            }
-        });
-
+            JsonObject object3 = object2.get(i).getAsJsonObject();
+            JsonObject object4 = object3.getAsJsonObject("data");
+            Post post = new Post();
+            post.setTitle(object4.get("title").getAsString());
+            post.setAuthor(object4.get("author").getAsString());
+            post.setThumbnail(object4.get("thumbnail").getAsString());
+            post.setUpvote(object4.get("ups").getAsInt());
+            post.setDownvote(object4.get("downs").getAsInt());
+            post.setSubreddit(subreddit);
+            repository.addPost(post);
+        }
+        repository.addToDB();
     }
 }
