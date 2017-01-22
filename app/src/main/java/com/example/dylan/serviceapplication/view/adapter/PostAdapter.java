@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dylan.serviceapplication.R;
+import com.example.dylan.serviceapplication.fragments.MainActivityFragment;
 import com.example.dylan.serviceapplication.models.Post;
 import com.squareup.picasso.Picasso;
 
@@ -38,6 +39,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MainViewHolder
     public PostAdapter.MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout, parent, false);
+        v.setOnClickListener(MainActivityFragment.postOnclickListener);
         return new MainViewHolder(v);
     }
 

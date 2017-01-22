@@ -1,20 +1,17 @@
 package com.example.dylan.serviceapplication.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.dylan.serviceapplication.R;
 import com.example.dylan.serviceapplication.manager.PostRepository;
+import com.example.dylan.serviceapplication.models.Post;
 import com.example.dylan.serviceapplication.network.RedditAPI;
 import com.example.dylan.serviceapplication.view.adapter.PostAdapter;
 
@@ -29,6 +26,11 @@ public class MainActivityFragment extends Fragment
 
     protected RecyclerView.LayoutManager layoutManager;
 
+    private int currentIndex;
+
+    public static PostOnclickListener postOnclickListener;
+    public PostClicked postClickedInterface;
+
 
     PostRepository repo;
     public MainActivityFragment()
@@ -41,7 +43,7 @@ public class MainActivityFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
+        postOnclickListener = new PostOnclickListener(getContext());
     }
 
     @Override
@@ -80,9 +82,39 @@ public class MainActivityFragment extends Fragment
     }
 
     @Override
-    public void onPause()
+    public void onAttach(Context context)
     {
-        super.onPause();
+        super.onAttach(context);
+        try {
+            postClickedInterface = (PostClicked) getActivity();
+        }
+        catch(ClassCastException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    private class PostOnclickListener implements View.OnClickListener{
+
+        private final Context context;
+
+        public PostOnclickListener(Context context)
+        {
+            this.context = context;
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            currentIndex = recyclerView.getChildAdapterPosition(v);
+            postClickedInterface.postClicked(repo.getGoTPosts().get(currentIndex));
+        }
+    }
+
+    public interface PostClicked
+    {
+        void postClicked(Post post);
     }
 
 }

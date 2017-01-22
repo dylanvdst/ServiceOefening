@@ -63,6 +63,8 @@ public class RedditAPI
                     post.setTitle(object4.get("title").getAsString());
                     post.setAuthor(object4.get("author").getAsString());
                     post.setThumbnail(object4.get("thumbnail").getAsString());
+                    post.setUpvote(object4.get("ups").getAsInt());
+                    post.setDownvote(object4.get("downs").getAsInt());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();
@@ -104,6 +106,8 @@ public class RedditAPI
                     post.setTitle(object4.get("title").getAsString());
                     post.setAuthor(object4.get("author").getAsString());
                     post.setThumbnail(object4.get("thumbnail").getAsString());
+                    post.setUpvote(object4.get("ups").getAsInt());
+                    post.setDownvote(object4.get("downs").getAsInt());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();
@@ -145,6 +149,8 @@ public class RedditAPI
                     post.setTitle(object4.get("title").getAsString());
                     post.setAuthor(object4.get("author").getAsString());
                     post.setThumbnail(object4.get("thumbnail").getAsString());
+                    post.setUpvote(object4.get("ups").getAsInt());
+                    post.setDownvote(object4.get("downs").getAsInt());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();
@@ -186,6 +192,8 @@ public class RedditAPI
                     post.setTitle(object4.get("title").getAsString());
                     post.setAuthor(object4.get("author").getAsString());
                     post.setThumbnail(object4.get("thumbnail").getAsString());
+                    post.setUpvote(object4.get("ups").getAsInt());
+                    post.setDownvote(object4.get("downs").getAsInt());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();
@@ -227,6 +235,8 @@ public class RedditAPI
                     post.setTitle(object4.get("title").getAsString());
                     post.setAuthor(object4.get("author").getAsString());
                     post.setThumbnail(object4.get("thumbnail").getAsString());
+                    post.setUpvote(object4.get("ups").getAsInt());
+                    post.setDownvote(object4.get("downs").getAsInt());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();
@@ -268,6 +278,8 @@ public class RedditAPI
                     post.setTitle(object4.get("title").getAsString());
                     post.setAuthor(object4.get("author").getAsString());
                     post.setThumbnail(object4.get("thumbnail").getAsString());
+                    post.setUpvote(object4.get("ups").getAsInt());
+                    post.setDownvote(object4.get("downs").getAsInt());
                     repository.addPost(post);
                 }
                 ringProgressDialog.dismiss();

@@ -19,9 +19,11 @@ import android.view.MenuItem;
 import com.example.dylan.serviceapplication.R;
 import com.example.dylan.serviceapplication.fragments.MainActivityFragment;
 import com.example.dylan.serviceapplication.fragments.MainActivityFragment_ViewBinding;
+import com.example.dylan.serviceapplication.fragments.PostFragment;
+import com.example.dylan.serviceapplication.models.Post;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener
+        implements NavigationView.OnNavigationItemSelectedListener, MainActivityFragment.PostClicked
 {
 
     @Override
@@ -127,5 +129,22 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void postClicked(Post post)
+    {
+        PostFragment fragment = new PostFragment();
+        Bundle args = new Bundle();
+        args.putString("TITLE", post.getTitle());
+        args.putString("AUTHOR", post.getAuthor());
+        args.putString("IMAGE", post.getThumbnail());
+        args.putInt("UPVOTE", post.getUpvote());
+        args.putInt("DOWNVOTE", post.getDownvote());
+        fragment.setArguments(args);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
