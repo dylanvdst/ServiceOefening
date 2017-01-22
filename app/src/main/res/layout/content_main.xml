@@ -15,11 +15,8 @@
     tools:showIn="@layout/app_bar_main"
     android:orientation="vertical">
 
-    <fragment
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:name="com.example.dylan.serviceapplication.fragments.MainActivityFragment"
-        tools:layout="@layout/fragment_main_activity"
-        tools:context="com.example.dylan.whoisit.activities.MainActivity"
         android:id="@+id/fragment"/>
 </LinearLayout>
