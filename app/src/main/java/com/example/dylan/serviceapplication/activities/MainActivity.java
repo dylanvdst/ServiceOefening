@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_restart)
         {
-            mainFragment.api.searchPosts(mainFragment.subreddit.getName());
+            mainFragment.api.searchPosts(mainFragment.subreddit, "", getString(R.string.MA));
         }
 
         return super.onOptionsItemSelected(item);

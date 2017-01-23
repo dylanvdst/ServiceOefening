@@ -15,6 +15,7 @@ public class Post {
     private String thumbnail;
     private Integer upvote;
     private Integer downvote;
+    private String after;
     private Long subredditId;
 
     /** Used to resolve relations */
@@ -34,13 +35,14 @@ public class Post {
         this.id = id;
     }
 
-    public Post(Long id, String title, String author, String thumbnail, Integer upvote, Integer downvote, Long subredditId) {
+    public Post(Long id, String title, String author, String thumbnail, Integer upvote, Integer downvote, String after, Long subredditId) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.thumbnail = thumbnail;
         this.upvote = upvote;
         this.downvote = downvote;
+        this.after = after;
         this.subredditId = subredditId;
     }
 
@@ -96,6 +98,14 @@ public class Post {
 
     public void setDownvote(Integer downvote) {
         this.downvote = downvote;
+    }
+
+    public String getAfter() {
+        return after;
+    }
+
+    public void setAfter(String after) {
+        this.after = after;
     }
 
     public Long getSubredditId() {

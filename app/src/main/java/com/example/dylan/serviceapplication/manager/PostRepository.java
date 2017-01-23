@@ -32,12 +32,11 @@ public class PostRepository
     private SubredditDao subDao;
     private Context context;
 
-    private ArrayList<Post> hulp;
 
     public PostRepository(Context context)
     {
         posts = new ArrayList<>();
-        helper = new DaoMaster.DevOpenHelper(context, "RedditDB9", null);
+        helper = new DaoMaster.DevOpenHelper(context, "RedditDB17", null);
         master = new DaoMaster(helper.getWritableDatabase());
         session = master.newSession();
         postDao = session.getPostDao();
@@ -50,27 +49,24 @@ public class PostRepository
         }
     }
 
-    public ArrayList<Post> getPosts(String subreddit)
+    public ArrayList<Post> getPosts()
     {
-        posts.clear();
-        hulp = new ArrayList<>();
-        Subreddit subreddit1 = null;
-        for(Subreddit sub : getSubReddits())
+        return posts;
+    }
+
+    public ArrayList<Post> getPostsFromSubreddit(Subreddit subreddit)
+    {
+        //posts.clear();
+        for(Post post : subreddit.getPosts())
         {
-            if(sub.getName().equals(subreddit))
-                subreddit1 = sub;
-        }
-        for(Post post : subreddit1.getPosts())
-        {
-            if(post.getSubreddit().getName().equals(subreddit))
-                posts.add(post);
+            posts.add(post);
         }
         return posts;
     }
 
     public ArrayList<Subreddit> getSubredditFromDB()
     {
-        AsyncSession session = postDao.getSession().startAsyncSession();
+        AsyncSession session = subDao.getSession().startAsyncSession();
         session.setListener(new AsyncOperationListener()
         {
             @Override
@@ -88,6 +84,19 @@ public class PostRepository
         return subreddits;
     }
 
+    public void deletePosts(Subreddit subreddit)
+    {
+        AsyncSession asyncSession = postDao.getSession().startAsyncSession();
+        for(Post post: posts)
+        {
+            if(post.getSubreddit() == subreddit)
+            {
+                asyncSession.delete(post);
+            }
+        }
+
+    }
+
     public void addPost(Post post)
     {
         posts.add(post);
@@ -101,7 +110,7 @@ public class PostRepository
     public void addToDB()
     {
         AsyncSession asyncSession = postDao.getSession().startAsyncSession();
-        for (Post post: posts)
+        for(Post post:posts)
         {
             asyncSession.insert(post);
         }
@@ -110,14 +119,15 @@ public class PostRepository
     public void addSubToDB()
     {
         AsyncSession session = subDao.getSession().startAsyncSession();
-        for(Subreddit s : setSubReddits())
+        setSubReddits();
+        for(Subreddit s : subreddits)
         {
             session.insert(s);
         }
 
     }
 
-    public ArrayList<Subreddit> setSubReddits()
+    public void setSubReddits()
     {
         Subreddit funny = new Subreddit();
         funny.setName(context.getString(R.string.s_funny));
@@ -138,12 +148,15 @@ public class PostRepository
         subreddits.add(donald);
         subreddits.add(belgium);
         subreddits.add(diy);
-        return subreddits;
-
     }
 
     public ArrayList<Subreddit> getSubReddits()
     {
         return subreddits;
+    }
+
+    public int getRepoSize()
+    {
+        return posts.size();
     }
 }

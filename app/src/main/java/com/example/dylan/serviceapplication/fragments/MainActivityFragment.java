@@ -28,7 +28,7 @@ public class MainActivityFragment extends Fragment
     @BindView(R.id.recyclerview)
     public RecyclerView recyclerView;
 
-    protected RecyclerView.LayoutManager layoutManager;
+    protected LinearLayoutManager layoutManager;
 
     private int currentIndex;
 
@@ -37,6 +37,10 @@ public class MainActivityFragment extends Fragment
     public RedditAPI api;
     public Subreddit subreddit;
     private ArrayList<Subreddit> subreddits;
+    private int repoSize;
+
+    private int pastVisibleItems, visibleItemCount, totalItemCount;
+    private boolean loading = false;
 
 
     public PostRepository repo;
@@ -63,7 +67,7 @@ public class MainActivityFragment extends Fragment
         Bundle bundle = getArguments();
         repo = new PostRepository(getContext());
         subreddits = repo.getSubReddits();
-
+        Log.i("MAF BUNDLE", (bundle != null) +"");
         if (bundle != null)
         {
 
@@ -78,20 +82,43 @@ public class MainActivityFragment extends Fragment
         {
             subreddit = subreddits.get(0);
         }
-
+        Log.i("MAF SUBREDDIT", subreddit.getName());
         ButterKnife.bind(this, rootView);
 
-        PostAdapter adapter = new PostAdapter(repo.getPosts(subreddit.getName()), getContext());
+        final PostAdapter adapter = new PostAdapter(repo.getPosts(), getContext());
         recyclerView.setAdapter(adapter);
         api = new RedditAPI(getContext(), repo, adapter);
-        if (repo.getPosts(subreddit.getName()).isEmpty())
+        if (repo.getPostsFromSubreddit(subreddit).isEmpty())
         {
-            api.searchPosts(subreddit.getName());
+            api.searchPosts(subreddit, "" ,"");
         }
-
+        Log.i("MAF REPO SIZE", repoSize + "");
+        repoSize = repo.getRepoSize();
+        Log.i("MAF REPO SIZE", repoSize +"");
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-        Log.i("MAINACTIVITYFRAGMENT", subreddit.getName());
+        layoutManager.findLastVisibleItemPosition();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                Log.i("MAF ONSCROLLED", "YEEEEES");
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = layoutManager.getChildCount();
+                totalItemCount = layoutManager.getItemCount();
+                pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+
+                if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
+                    //bottom of recyclerview
+                    Log.i("MAF ONSCROLLED REPS", repoSize + "");
+                    repoSize = repo.getRepoSize();
+                    Log.i("MAF ONSCROLLED REPS", repoSize + "");
+                    Log.i("MAF ONSCROLLED AFT", repo.getPosts().get(repoSize-1).getAfter());
+                    api.searchPosts(subreddit, repo.getPosts().get(repoSize-1).getAfter(), "");
+                }
+            }
+        });
         return rootView;
     }
 
@@ -123,7 +150,7 @@ public class MainActivityFragment extends Fragment
         public void onClick(View v)
         {
             currentIndex = recyclerView.getChildAdapterPosition(v);
-            postClickedInterface.postClicked(repo.getPosts(subreddit.getName()).get(currentIndex));
+            postClickedInterface.postClicked(repo.getPosts().get(currentIndex));
         }
     }
 
@@ -131,5 +158,7 @@ public class MainActivityFragment extends Fragment
     {
         void postClicked(Post post);
     }
+
+
 
 }

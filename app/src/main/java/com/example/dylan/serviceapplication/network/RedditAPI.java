@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.dylan.serviceapplication.R;
 import com.example.dylan.serviceapplication.manager.PostRepository;
 import com.example.dylan.serviceapplication.models.Post;
 import com.example.dylan.serviceapplication.models.Subreddit;
@@ -41,18 +42,14 @@ public class RedditAPI
         this.adapter = adapter;
     }
 
-    public void searchPosts(String subreddit)
+    public void searchPosts(Subreddit subreddit, String after, String where)
     {
         final RetrofitPosts service = retrofit.create(RetrofitPosts.class);
         final ProgressDialog ringProgressDialog = ProgressDialog.show(context, "Please wait ...", "Getting the information from Reddit", true);
         ringProgressDialog.setCancelable(true);
-        Call<JsonObject> callGoTPosts = service.getPosts(subreddit);
-        ArrayList<Subreddit> subreddits = repository.getSubredditFromDB();
-        for(Subreddit sub : subreddits)
-        {
-            if(sub.getName().equals(subreddit))
-                this.subreddit = sub;
-        }
+        Call<JsonObject> callGoTPosts = service.getPosts(subreddit.getName(), after);
+        this.subreddit = subreddit;
+        final String wheres = where;
         callGoTPosts.enqueue(new Callback<JsonObject>()
         {
 
@@ -60,8 +57,7 @@ public class RedditAPI
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
             {
 
-
-                processCall(response);
+                processCall(response, wheres);
                 ringProgressDialog.dismiss();
                 adapter.notifyDataSetChanged();
 
@@ -76,12 +72,16 @@ public class RedditAPI
 
     }
 
-    private void processCall(Response<JsonObject> response)
+    private void processCall(Response<JsonObject> response, String where)
     {
+        if(where.equals(context.getString(R.string.MA)))
+        {
+            repository.deletePosts(subreddit);
+        }
         JsonObject object = response.body();
         JsonObject object1 = object.getAsJsonObject("data");
         JsonArray object2 = object1.getAsJsonArray("children");
-        repository.clear();
+        //repository.clear();
         for(int i = 0; i < object2.size(); i++)
         {
             JsonObject object3 = object2.get(i).getAsJsonObject();
@@ -92,9 +92,11 @@ public class RedditAPI
             post.setThumbnail(object4.get("thumbnail").getAsString());
             post.setUpvote(object4.get("ups").getAsInt());
             post.setDownvote(object4.get("downs").getAsInt());
+            post.setAfter(object1.get("after").getAsString());
             post.setSubreddit(subreddit);
             repository.addPost(post);
         }
+
         repository.addToDB();
     }
 }

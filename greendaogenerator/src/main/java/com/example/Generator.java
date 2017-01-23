@@ -20,6 +20,7 @@ public class Generator
         post.addStringProperty("thumbnail");
         post.addIntProperty("upvote");
         post.addIntProperty("downvote");
+        post.addStringProperty("after");
 
         Entity subreddit = schema.addEntity("Subreddit");
         subreddit.addIdProperty();
