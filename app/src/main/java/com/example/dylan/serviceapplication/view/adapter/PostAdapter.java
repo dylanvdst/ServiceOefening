@@ -1,7 +1,6 @@
 package com.example.dylan.serviceapplication.view.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +51,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MainViewHolder
         TextView author = holder.author;
         Context context = holder.thumbnail.getContext();
         Picasso.with(context).load(post.getThumbnail()).into(thumbnail);
-        //image.setImageResource(R.drawable.ic_menu_camera);
         title.setText(post.getTitle());
         author.setText(post.getAuthor());
     }

@@ -36,7 +36,7 @@ public class PostRepository
     public PostRepository(Context context)
     {
         posts = new ArrayList<>();
-        helper = new DaoMaster.DevOpenHelper(context, "RedditDB17", null);
+        helper = new DaoMaster.DevOpenHelper(context, "RedditDB18", null);
         master = new DaoMaster(helper.getWritableDatabase());
         session = master.newSession();
         postDao = session.getPostDao();

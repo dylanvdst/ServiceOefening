@@ -26,7 +26,6 @@ import com.example.dylan.serviceapplication.models.Post;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainActivityFragment.PostClicked
 {
-    public PostRepository repository;
     private MainActivityFragment mainFragment;
 
     @Override

@@ -2,7 +2,6 @@ package com.example.dylan.serviceapplication.network;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 
 import com.example.dylan.serviceapplication.R;
 import com.example.dylan.serviceapplication.manager.PostRepository;
@@ -11,9 +10,6 @@ import com.example.dylan.serviceapplication.models.Subreddit;
 import com.example.dylan.serviceapplication.view.adapter.PostAdapter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;

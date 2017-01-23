@@ -40,8 +40,6 @@ public class MainActivityFragment extends Fragment
     private int repoSize;
 
     private int pastVisibleItems, visibleItemCount, totalItemCount;
-    private boolean loading = false;
-
 
     public PostRepository repo;
 
